@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
+	"path"
 	"strconv"
 	"strings"
 )
@@ -14,7 +16,18 @@ func main() {
 
 	if len(*flagHttp) == 0 {
 		fmt.Println(Hostname(flag.Arg(0)))
+		return
 	}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if e := recover(); e != nil {
+				http.Error(w, fmt.Sprint(e), http.StatusInternalServerError)
+			}
+		}()
+		fmt.Fprintf(w, "%s", Hostname(path.Base(r.URL.Path)))
+	})
+	log.Fatal(http.ListenAndServe(*flagHttp, nil))
 }
 
 func Hostname(mac string) string {

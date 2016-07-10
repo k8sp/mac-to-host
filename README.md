@@ -135,4 +135,18 @@ Very short!
 
 ## The Program
 
+We can run the program as a command line tool:
 
+```
+$ go get github.com/k8sp/mac-to-host
+$ $GOPATH/bin/mac-to-host ac:29:3a:9c:aa:d5
+heavily-calm-fake-adept-blind-back
+```
+
+Or, we can run it as an HTTP server:
+
+```
+$ $GOPATH/bin/mac-to-host -http="0.0.0.0:12340" &
+$ curl http://127.0.0.1:12340/ac:29:3a:9c:aa:d5
+heavily-calm-fake-adept-blind-back
+```
